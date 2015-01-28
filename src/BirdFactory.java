@@ -5,6 +5,8 @@ import org.jsfml.graphics.Shape;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
+import java.util.Random;
+
 /**
  * Created by smithma on 27/01/15.
  */
@@ -49,14 +51,15 @@ public class BirdFactory {
         s.setPosition(position);
 
         b.setShape(s);
-        b.setVelocity(VMath.rndVector2f(b.getMaxSpeed()));
+        b.setVelocity(VMath.rndVector2f());
 
         return b;
     }
 
     //if no position passed return bird with random position
     public Bird createBird(BirdSpecies species){
-        Vector2f rndPos = new Vector2f((float) Math.random() * windowSize.x, (float) Math.random()*windowSize.y);
+        Random rnd = new Random();
+        Vector2f rndPos = new Vector2f(rnd.nextFloat() * windowSize.x, rnd.nextFloat()*windowSize.y);
         return createBird(species, rndPos);
     }
 }

@@ -1,4 +1,5 @@
 import org.jsfml.system.Vector2f;
+import org.jsfml.system.Vector2i;
 
 import java.util.List;
 
@@ -6,5 +7,8 @@ import java.util.List;
  * Created by smithma on 27/01/15.
  */
 public interface BirdMotionHandler {
-    public Vector2f calculateForce(List<Bird> nearbyBirds);
+    public Vector2f getFlockForce(List<Bird> nearbyBirds, Vector2f myPos);
+    public Vector2f getEdgeForce(Vector2i windowSize, Vector2f myPos);
 }
+
+

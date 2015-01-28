@@ -1,6 +1,7 @@
 import org.jsfml.graphics.CircleShape;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
+import org.jsfml.system.Vector2i;
 
 import java.util.List;
 
@@ -26,11 +27,20 @@ public class Bird extends Actor{
         if(VMath.magnitude(velocity) > maxSpeed){
             velocity = Vector2f.mul(VMath.normalize(velocity), maxSpeed);
         }
-        shape.move(Vector2f.mul(velocity, dt.asSeconds()));
+        Vector2f dist = Vector2f.mul(velocity, dt.asSeconds());
+        move(dist);
     }
 
-    public Vector2f calculateForce(List<Bird> nearbyBirds){
-        return motionHandler.calculateForce(nearbyBirds);
+    public Vector2f getFlockForce(List<Bird> nearbyBirds){
+        return motionHandler.getFlockForce(nearbyBirds, getPosition());
+    }
+
+    public Vector2f getEdgeForce(Vector2i windowSize, Vector2f myPos){
+        return motionHandler.getEdgeForce(windowSize, myPos);
+    }
+
+    public void move(Vector2f offset){
+        shape.move(offset);
     }
 
     public float getMaxSpeed(){

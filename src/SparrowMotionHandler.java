@@ -1,41 +1,94 @@
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.system.Vector2f;
+import org.jsfml.system.Vector2i;
+import sun.net.www.content.image.jpeg;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by smithma on 27/01/15.
  */
 public class SparrowMotionHandler implements BirdMotionHandler {
 
-    private float alignStrength = 1.0f;
+    private float alignStrength = 2.0f;
+    private float separateStrength = 5.0f;
+    private float coherenceStrength = 2.0f;
 
-    public Vector2f align(List<Bird> nearbyBirds){
+    private Vector2f align(List<Bird> nearbyBirds, Vector2f myPos){
         Vector2f sum = Vector2f.ZERO;
 
         //sum together the directions of the nearby birds to find the overall direction
         for(Bird b : nearbyBirds){
-            Vector2f dir = VMath.normalize(b.getVelocity());
-            sum = Vector2f.add(sum, dir);
+            if(b.getSpecies() == BirdSpecies.SPARROW){
+                Vector2f dir = VMath.normalize(b.getVelocity());
+                sum = Vector2f.add(sum, dir);
+            }
         }
 
-        return Vector2f.mul(VMath.normalize(sum), alignStrength);
+        return Vector2f.mul(VMath.normalize(Vector2f.sub(sum, myPos)), alignStrength);
     }
 
-    public Vector2f separate(List<Bird> nearbyBirds){
-        return Vector2f.ZERO;
+    private Vector2f separate(List<Bird> nearbyBirds, Vector2f myPos){
+
+        Vector2f sum = Vector2f.ZERO;
+
+        for(Bird b: nearbyBirds){
+            if(b.getSpecies() == BirdSpecies.SPARROW){
+                Vector2f pos = Vector2f.sub(myPos, b.getPosition());
+                float dist = VMath.magnitude(pos);
+                float repelForce = 1.0f/((float) Math.pow(dist, 2.0f)) * separateStrength;
+                sum = Vector2f.add(sum, Vector2f.mul(VMath.normalize(pos), repelForce));
+            }
+        }
+
+        return sum;
     }
 
-    public Vector2f coherence(List<Bird> nearbyBirds){
-        return Vector2f.ZERO;
+    private Vector2f coherence(List<Bird> nearbyBirds, Vector2f myPos){
+
+        Vector2f sum = Vector2f.ZERO;
+
+        for(Bird b : nearbyBirds){
+            if(b.getSpecies() == BirdSpecies.SPARROW){
+                Vector2f pos = b.getPosition();
+                sum = Vector2f.add(sum, pos);
+            }
+        }
+
+        return Vector2f.mul(VMath.normalize(Vector2f.sub(sum, myPos)), coherenceStrength);
     }
 
     @Override
-    public Vector2f calculateForce(List<Bird> nearbyBirds) {
-        Vector2f alignment = align(nearbyBirds),
-                separation = separate(nearbyBirds),
-                cohesion = coherence(nearbyBirds);
+    public Vector2f getFlockForce(List<Bird> nearbyBirds, Vector2f myPos) {
+        Vector2f alignment = align(nearbyBirds, myPos),
+                separation = separate(nearbyBirds, myPos),
+                cohesion = coherence(nearbyBirds, myPos);
 
         return Vector2f.add(Vector2f.add(alignment, separation), cohesion);
+    }
+
+    public Vector2f getEdgeForce(Vector2i wS, Vector2f myPos){
+        float edgePadding = 50.0f;
+        Vector2f windowSize = new Vector2f(wS);
+        float fx = 0, fy = 0;
+
+        if(myPos.x < edgePadding){
+            fx = edgePadding - myPos.x;
+        }
+
+        if(myPos.x > (windowSize.x - edgePadding)){
+            fx = -1 * (edgePadding - (windowSize.x - myPos.x));
+        }
+
+        if(myPos.y < edgePadding){
+            fy = edgePadding - myPos.y;
+        }
+
+        if(myPos.y > (windowSize.y - edgePadding)){
+            fy = -1 * (edgePadding - (windowSize.y - myPos.y));
+        }
+
+        return new Vector2f (fx, fy);
     }
 }

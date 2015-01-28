@@ -1,10 +1,15 @@
 import com.sun.deploy.config.VerboseDefaultConfig;
 import org.jsfml.system.Vector2f;
 
+import java.util.Random;
+
 /**
  * Created by smithma on 27/01/15.
  */
 public class VMath {
+
+    private static Random rnd = new Random();
+
     public static Vector2f normalize(Vector2f v){
         return new Vector2f(v.x/magnitude(v), v.y/magnitude(v));
     }
@@ -18,8 +23,9 @@ public class VMath {
     }
 
     public static Vector2f rndVector2f(){
+
         //generate a random normalised vector between -1 and 1 in each direction
-        return normalize(new Vector2f((float)Math.random()*2 - 1, (float)Math.random()*2 - 1));
+        return normalize(new Vector2f(rnd.nextFloat()*2 - 1, rnd.nextFloat() * 2 - 1));
     }
 
     public static float dot(Vector2f v1, Vector2f v2){

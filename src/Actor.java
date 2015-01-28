@@ -1,3 +1,4 @@
+import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.graphics.Shape;
 import org.jsfml.system.Time;
@@ -60,6 +61,8 @@ public abstract class Actor {
     public float getLeft(){
         return shape.getGlobalBounds().left;
     }
+
+    public FloatRect getGlobalBounds(){ return shape.getGlobalBounds(); }
 
 
 
