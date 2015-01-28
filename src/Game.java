@@ -22,13 +22,14 @@ import java.util.List;
  */
 public class Game {
 
-    private Vector2i windowSize = new Vector2i(600, 250);
+    private Vector2i windowSize = new Vector2i(700, 350);
     private RenderWindow window = new RenderWindow();
     private View view;
     private View bgView = new View();
     private Sprite bg = new Sprite(loadTexture("skybg.jpg"));
+    private int birdCount = 200;
 
-    private static final Time timePerFrame = Time.getSeconds(1f/60f);
+    private static final Time timePerFrame = Time.getSeconds(1.0f/60.0f);
 
     private List<Bird> birds = new ArrayList<Bird>();
 
@@ -37,7 +38,7 @@ public class Game {
         view = (View) window.getView();
 
         BirdFactory birdFactory = new BirdFactory(windowSize);
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < birdCount; i++){
             birds.add(birdFactory.createBird(BirdSpecies.SPARROW));
         }
         //birds.add(birdFactory.createBird(BirdSpecies.HAWK));
@@ -117,7 +118,7 @@ public class Game {
 
     private void render(){
         window.clear();
-                
+
         window.setView(bgView);
         window.draw(bg);
 

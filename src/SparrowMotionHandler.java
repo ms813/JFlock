@@ -12,7 +12,7 @@ import java.util.Vector;
 public class SparrowMotionHandler implements BirdMotionHandler {
 
     private float alignStrength = 2.0f;
-    private float separateStrength = 5.0f;
+    private float separateStrength = 6.0f;
     private float coherenceStrength = 2.0f;
 
     private Vector2f align(List<Bird> nearbyBirds, Vector2f myPos){
