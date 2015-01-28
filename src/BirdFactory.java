@@ -1,7 +1,4 @@
-import org.jsfml.graphics.CircleShape;
-import org.jsfml.graphics.Color;
-import org.jsfml.graphics.RectangleShape;
-import org.jsfml.graphics.Shape;
+import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
@@ -19,38 +16,27 @@ public class BirdFactory {
     }
 
     public Bird createBird(BirdSpecies species, Vector2f position){
+        Random rnd = new Random();
 
         Bird b = new Bird();
-        Shape s;
+        Sprite s;
         if(species == BirdSpecies.SPARROW){
 
-            s = new CircleShape(2.5f);
-            s.setFillColor(Color.GREEN);
-            b.setMaxSpeed(15.0f);
-            b.setMotionHandler(new SparrowMotionHandler());
+            String txtName = "bird" +  rnd.nextInt(5);
+            s = new Sprite(TextureLibrary.getTexture(txtName));
             b.setSpecies(BirdSpecies.SPARROW);
-            b.setFriction(0.9999f);
-            b.setMass(0.2f);
-            b.setLocalityRadius(50.0f);
 
         } else if(species == BirdSpecies.HAWK){
 
-            s = new RectangleShape(new Vector2f(7.5f, 7.5f));
-            s.setFillColor(Color.RED);
-            b.setMaxSpeed(3.0f);
-            b.setMotionHandler(new NullMotionHandler());
+            s = new Sprite(TextureLibrary.getTexture("hawk"));
             b.setSpecies(BirdSpecies.HAWK);
-            b.setFriction(10.f);
-            b.setMass(1.0f);
 
         } else {
-            s = new CircleShape(5.0f);
-            s.setFillColor(Color.YELLOW);
+            s = new Sprite(TextureLibrary.getTexture("bird0"));
         }
-
+        s.setScale(0.05f, 0.05f);
         s.setPosition(position);
-
-        b.setShape(s);
+        b.setSprite(s);
         b.setVelocity(VMath.rndVector2f());
 
         return b;

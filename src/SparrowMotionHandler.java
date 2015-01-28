@@ -1,19 +1,16 @@
-import org.jsfml.graphics.RenderWindow;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
-import sun.net.www.content.image.jpeg;
 
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by smithma on 27/01/15.
  */
 public class SparrowMotionHandler implements BirdMotionHandler {
 
-    private float alignStrength = 2.0f;
-    private float separateStrength = 6.0f;
-    private float coherenceStrength = 2.0f;
+    private float alignStrength = 0.3f;
+    private float separateStrength = 0.8f;
+    private float coherenceStrength = 0.3f;
 
     private Vector2f align(List<Bird> nearbyBirds, Vector2f myPos){
         Vector2f sum = Vector2f.ZERO;
@@ -26,7 +23,7 @@ public class SparrowMotionHandler implements BirdMotionHandler {
             }
         }
 
-        return Vector2f.mul(VMath.normalize(Vector2f.sub(sum, myPos)), alignStrength);
+        return Vector2f.mul(VMath.normalize(Vector2f.sub(sum, myPos)), BirdSpecies.SPARROW.getMaxSpeed() * alignStrength);
     }
 
     private Vector2f separate(List<Bird> nearbyBirds, Vector2f myPos){
@@ -37,7 +34,7 @@ public class SparrowMotionHandler implements BirdMotionHandler {
             if(b.getSpecies() == BirdSpecies.SPARROW){
                 Vector2f pos = Vector2f.sub(myPos, b.getPosition());
                 float dist = VMath.magnitude(pos);
-                float repelForce = 1.0f/((float) Math.pow(dist, 2.0f)) * separateStrength;
+                float repelForce = 1.0f/((float) Math.pow(dist, 2.0f)) * BirdSpecies.SPARROW.getMaxSpeed() *  separateStrength;
                 sum = Vector2f.add(sum, Vector2f.mul(VMath.normalize(pos), repelForce));
             }
         }
@@ -56,7 +53,7 @@ public class SparrowMotionHandler implements BirdMotionHandler {
             }
         }
 
-        return Vector2f.mul(VMath.normalize(Vector2f.sub(sum, myPos)), coherenceStrength);
+        return Vector2f.mul(VMath.normalize(Vector2f.sub(sum, myPos)), BirdSpecies.SPARROW.getMaxSpeed() * coherenceStrength);
     }
 
     @Override

@@ -1,7 +1,5 @@
-import com.sun.java.swing.plaf.windows.resources.windows;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.Texture;
 import org.jsfml.graphics.View;
 import org.jsfml.system.Clock;
 import org.jsfml.system.Time;
@@ -10,10 +8,6 @@ import org.jsfml.system.Vector2i;
 import org.jsfml.window.VideoMode;
 import org.jsfml.window.event.Event;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +16,11 @@ import java.util.List;
  */
 public class Game {
 
-    private Vector2i windowSize = new Vector2i(700, 350);
+    private Vector2i windowSize = new Vector2i(1200, 600);
     private RenderWindow window = new RenderWindow();
     private View view;
     private View bgView = new View();
-    private Sprite bg = new Sprite(loadTexture("skybg.jpg"));
+    private Sprite bg = new Sprite(TextureLibrary.getTexture("skybg"));
     private int birdCount = 200;
 
     private static final Time timePerFrame = Time.getSeconds(1.0f/60.0f);
@@ -42,17 +36,6 @@ public class Game {
             birds.add(birdFactory.createBird(BirdSpecies.SPARROW));
         }
         //birds.add(birdFactory.createBird(BirdSpecies.HAWK));
-    }
-
-    private Texture loadTexture(String textureName){
-        Texture t = new Texture();
-        try{
-            t.loadFromFile(Paths.get("resources" + File.separatorChar + textureName));
-            t.setRepeated(true);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return t;
     }
 
     public void run(){
@@ -110,10 +93,10 @@ public class Game {
             //a.applyForce(VMath.normalize(edgeForce), VMath.magnitude(edgeForce));
 
             a.update(dt);
-            //edgeWrap(a);
+            edgeWrap(a);
         }
 
-        view.setCenter(Vector2f.div(sumPos, birds.size()));
+        //view.setCenter(Vector2f.div(sumPos, birds.size()));
     }
 
     private void render(){
@@ -121,11 +104,12 @@ public class Game {
 
         window.setView(bgView);
         window.draw(bg);
-
         window.setView(view);
+
         for(Actor a : birds){
             a.render(window);
         }
+
         window.display();
     };
 
@@ -137,22 +121,22 @@ public class Game {
 
         if(pos.x < 0){
             x = windowSize.x;
-            System.out.println("wrap left");
+            //System.out.println("wrap left");
         }
 
         if(pos.x > windowSize.x){
             x = 0;
-            System.out.println("wrap right");
+            //System.out.println("wrap right");
         }
 
         if(pos.y < 0){
             y = windowSize.y;
-            System.out.println("wrap top");
+            //System.out.println("wrap top");
         }
 
         if(pos.y > windowSize.y){
             y = 0;
-            System.out.println("wrap bottom");
+            //System.out.println("wrap bottom");
         }
         if(pos.x != x || pos.y != y){
             a.setPosition(new Vector2f(x, y));
