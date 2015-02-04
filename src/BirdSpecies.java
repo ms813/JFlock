@@ -3,7 +3,7 @@
  */
 public enum BirdSpecies {
     SPARROW(0.2f, 50.0f, 0.9999f, 50.0f, new SparrowMotionHandler()),
-    HAWK(1.0f, 3.0f, 10.0f, 50.0f, new NullMotionHandler());
+    HAWK(1.0f, 40.0f, 10.0f, 250.0f, new HawkMotionHandler());
 
     private float mass;
     private float maxSpeed;

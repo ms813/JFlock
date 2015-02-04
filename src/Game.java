@@ -35,7 +35,7 @@ public class Game {
         for(int i = 0; i < birdCount; i++){
             birds.add(birdFactory.createBird(BirdSpecies.SPARROW));
         }
-        //birds.add(birdFactory.createBird(BirdSpecies.HAWK));
+        birds.add(birdFactory.createBird(BirdSpecies.HAWK));
     }
 
     public void run(){
@@ -88,9 +88,6 @@ public class Game {
 
             Vector2f flockForce = a.getFlockForce(nearbyBirds);
             a.applyForce(VMath.normalize(flockForce), VMath.magnitude(flockForce));
-
-            //Vector2f edgeForce = a.getEdgeForce(windowSize, a.getPosition());
-            //a.applyForce(VMath.normalize(edgeForce), VMath.magnitude(edgeForce));
 
             a.update(dt);
             edgeWrap(a);

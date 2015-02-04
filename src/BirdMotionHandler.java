@@ -8,7 +8,6 @@ import java.util.List;
  */
 public interface BirdMotionHandler {
     public Vector2f getFlockForce(List<Bird> nearbyBirds, Vector2f myPos);
-    public Vector2f getEdgeForce(Vector2i windowSize, Vector2f myPos);
 }
 
 

@@ -56,10 +56,6 @@ public class Bird extends Actor{
         return species.getMotionHandler().getFlockForce(nearbyBirds, getPosition());
     }
 
-    public Vector2f getEdgeForce(Vector2i windowSize, Vector2f myPos){
-        return species.getMotionHandler().getEdgeForce(windowSize, myPos);
-    }
-
     public void move(Vector2f offset){
         sprite.move(offset);
     }
