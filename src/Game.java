@@ -1,7 +1,4 @@
-import org.jsfml.graphics.Color;
-import org.jsfml.graphics.RenderWindow;
-import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.View;
+import org.jsfml.graphics.*;
 import org.jsfml.system.Clock;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
@@ -120,7 +117,6 @@ public class Game {
         for(Actor a : birds){
             a.render(window);
         }
-
         window.display();
         frameCount++;
     };

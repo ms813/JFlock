@@ -13,9 +13,7 @@ public abstract class Actor {
 
     abstract public void update(Time dt);
 
-    public void render(RenderWindow window){
-        window.draw(sprite);
-    }
+    abstract void render(RenderWindow window);
 
     abstract public void applyForce(Vector2f dir, float magnitude);
 

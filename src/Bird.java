@@ -1,5 +1,4 @@
-import org.jsfml.graphics.IntRect;
-import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.*;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
@@ -13,12 +12,25 @@ public class Bird extends Actor{
 
     private BirdSpecies species;
     private BirdMotionHandler motionHandler;
+    CircleShape localRadius;
+
+    private boolean drawLocalRadius = true;
 
     boolean facingLeft = true;
 
     public Bird(){
        //default white circle if nothing is specified
         sprite = new Sprite();
+
+    }
+
+    public void init(){
+        localRadius = new CircleShape(species.getLocalityRadius());
+        localRadius.setFillColor(Color.TRANSPARENT);
+        localRadius.setOrigin(localRadius.getGlobalBounds().width/2, localRadius.getGlobalBounds().height/2);
+        localRadius.setOutlineThickness(2.0f);
+        localRadius.setOutlineColor(Color.BLACK);
+        localRadius.setPosition(sprite.getPosition());
     }
 
     @Override
@@ -46,6 +58,15 @@ public class Bird extends Actor{
 
         Vector2f dist = Vector2f.mul(velocity, dt.asSeconds());
         move(dist);
+        localRadius.setPosition(sprite.getPosition());
+    }
+
+    @Override
+    void render(RenderWindow window) {
+        window.draw(sprite);
+        if(drawLocalRadius){
+            window.draw(localRadius);
+        }
     }
 
     @Override

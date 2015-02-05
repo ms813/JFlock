@@ -40,6 +40,7 @@ public class BirdFactory {
         s.setPosition(position);
         b.setSprite(s);
         b.setVelocity(VMath.rndVector2f());
+        b.init();
 
         return b;
     }
