@@ -1,4 +1,11 @@
-import org.jsfml.graphics.*;
+import GUI.GUI;
+import GUI.GuiButton;
+import GUI.BtnFunction;
+import Libraries.TextureLibrary;
+import org.jsfml.graphics.Color;
+import org.jsfml.graphics.RenderWindow;
+import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.View;
 import org.jsfml.system.Clock;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
@@ -16,8 +23,10 @@ public class Game {
 
     private Vector2i windowSize = new Vector2i(1200, 600);
     private RenderWindow window = new RenderWindow();
-    private View view;
 
+    private GUI gui = new GUI();
+
+    private View view;
     private View bgView = new View();
     private Sprite bg = new Sprite(TextureLibrary.getTexture("skybg"));
     private float colorCycleRate = 0.05f;
@@ -33,6 +42,7 @@ public class Game {
 
     private void init(){
         window.create(new VideoMode(windowSize.x, windowSize.y), "JFlock");
+
         view = (View) window.getView();
 
         BirdFactory birdFactory = new BirdFactory(windowSize);
@@ -43,13 +53,14 @@ public class Game {
         for(int i = 0; i < hawkCount; i++){
             birds.add(birdFactory.createBird(BirdSpecies.HAWK));
         }
+
+        createGUI();
     }
 
     public void run(){
         init();
         Clock clock = new Clock();
         Time timeSinceLastUpdate = Time.ZERO;
-
 
         while(window.isOpen()){
             Time elapsedTime = clock.restart();
@@ -66,6 +77,7 @@ public class Game {
     }
 
     private void processEvents(){
+        gui.processEvents();
         for (Event event : window.pollEvents()) {
             if (event.type == Event.Type.CLOSED) {
                 window.close();
@@ -74,6 +86,9 @@ public class Game {
     }
 
     private void update(Time dt){
+
+        gui.update();
+
         if(colorCycle){
             bg.setColor(colorCycle());
         }
@@ -108,6 +123,7 @@ public class Game {
     }
 
     private void render(){
+        gui.render();
         window.clear();
 
         window.setView(bgView);
@@ -149,6 +165,30 @@ public class Game {
         if(pos.x != x || pos.y != y){
             a.setPosition(new Vector2f(x, y));
         }
+    }
+
+    private void createGUI(){
+        gui.addButton(new GuiButton("Sparrow +", new BtnFunction() {
+            @Override
+            public void onClick() {
+                System.out.println("Sparrow +");
+            }
+        }));
+
+        gui.addButton(new GuiButton("Sparrow -", new BtnFunction() {
+            @Override
+            public void onClick() {
+                System.out.println("Sparrow -");
+            }
+        }));
+
+        gui.addButton(new GuiButton("Hawk +", new BtnFunction() {
+            @Override
+            public void onClick() {
+                System.out.println("Hawk +");
+            }
+        }));
+        gui.pack();
     }
 
     private Color colorCycle(){

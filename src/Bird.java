@@ -14,7 +14,7 @@ public class Bird extends Actor{
     private BirdMotionHandler motionHandler;
     CircleShape localRadius;
 
-    private boolean drawLocalRadius = true;
+    private boolean drawLocalRadius = false;
 
     boolean facingLeft = true;
 

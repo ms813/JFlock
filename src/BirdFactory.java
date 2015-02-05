@@ -1,3 +1,4 @@
+import Libraries.TextureLibrary;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
