@@ -21,7 +21,8 @@ public class Game {
     private View view;
     private View bgView = new View();
     private Sprite bg = new Sprite(TextureLibrary.getTexture("skybg"));
-    private int birdCount = 200;
+    private int sparrowCount = 200;
+    private int hawkCount = 5;
 
     private static final Time timePerFrame = Time.getSeconds(1.0f/60.0f);
 
@@ -32,10 +33,13 @@ public class Game {
         view = (View) window.getView();
 
         BirdFactory birdFactory = new BirdFactory(windowSize);
-        for(int i = 0; i < birdCount; i++){
+        for(int i = 0; i < sparrowCount; i++){
             birds.add(birdFactory.createBird(BirdSpecies.SPARROW));
         }
-        birds.add(birdFactory.createBird(BirdSpecies.HAWK));
+
+        for(int i = 0; i < hawkCount; i++){
+            birds.add(birdFactory.createBird(BirdSpecies.HAWK));
+        }
     }
 
     public void run(){

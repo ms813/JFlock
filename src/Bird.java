@@ -12,6 +12,7 @@ import java.util.List;
 public class Bird extends Actor{
 
     private BirdSpecies species;
+    private BirdMotionHandler motionHandler;
 
     boolean facingLeft = true;
 
@@ -53,7 +54,7 @@ public class Bird extends Actor{
     }
 
     public Vector2f getFlockForce(List<Bird> nearbyBirds){
-        return species.getMotionHandler().getFlockForce(nearbyBirds, getPosition());
+        return motionHandler.getFlockForce(nearbyBirds, getPosition());
     }
 
     public void move(Vector2f offset){
@@ -74,6 +75,10 @@ public class Bird extends Actor{
 
     public float getLocalityRadius(){
         return species.getLocalityRadius();
+    }
+
+    public void setMotionHandler(BirdMotionHandler mh){
+        this.motionHandler = mh;
     }
 
 

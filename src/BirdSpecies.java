@@ -2,8 +2,8 @@
  * Created by smithma on 27/01/15.
  */
 public enum BirdSpecies {
-    SPARROW(0.2f, 50.0f, 0.9999f, 50.0f, new SparrowMotionHandler()),
-    HAWK(1.0f, 40.0f, 10.0f, 250.0f, new HawkMotionHandler());
+    SPARROW(0.2f, 50.0f, 0.9999f, 50.0f),
+    HAWK(1.0f, 49.0f, 10.0f, 250.0f);
 
     private float mass;
     private float maxSpeed;
@@ -11,12 +11,11 @@ public enum BirdSpecies {
     private float localityRadius;
     private BirdMotionHandler motionHandler;
 
-    BirdSpecies(float mass, float maxSpeed, float friction, float localityRadius, BirdMotionHandler motionHandler){
+    BirdSpecies(float mass, float maxSpeed, float friction, float localityRadius){
         this.mass = mass;
         this.maxSpeed = maxSpeed;
         this.friction = friction;
         this.localityRadius = localityRadius;
-        this.motionHandler = motionHandler;
     }
 
     public float getMass() {
@@ -34,6 +33,4 @@ public enum BirdSpecies {
     public float getLocalityRadius() {
         return localityRadius;
     }
-
-    public BirdMotionHandler getMotionHandler(){ return motionHandler; }
 }

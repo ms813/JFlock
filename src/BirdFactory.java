@@ -25,11 +25,13 @@ public class BirdFactory {
             String txtName = "bird" +  rnd.nextInt(5);
             s = new Sprite(TextureLibrary.getTexture(txtName));
             b.setSpecies(BirdSpecies.SPARROW);
+            b.setMotionHandler(new SparrowMotionHandler());
 
         } else if(species == BirdSpecies.HAWK){
 
             s = new Sprite(TextureLibrary.getTexture("hawk"));
             b.setSpecies(BirdSpecies.HAWK);
+            b.setMotionHandler(new HawkMotionHandler());
 
         } else {
             s = new Sprite(TextureLibrary.getTexture("bird0"));

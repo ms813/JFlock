@@ -25,7 +25,7 @@ public class VMath {
     public static Vector2f rndVector2f(){
 
         //generate a random normalised vector between -1 and 1 in each direction
-        return normalize(new Vector2f(rnd.nextFloat()*2 - 1, rnd.nextFloat() * 2 - 1));
+        return normalize(new Vector2f(rnd.nextFloat()*2.0f - 1.0f, rnd.nextFloat() * 2.0f - 1.0f));
     }
 
     public static float dot(Vector2f v1, Vector2f v2){
