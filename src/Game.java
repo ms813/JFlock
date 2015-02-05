@@ -1,3 +1,4 @@
+import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.View;
@@ -19,12 +20,17 @@ public class Game {
     private Vector2i windowSize = new Vector2i(1200, 600);
     private RenderWindow window = new RenderWindow();
     private View view;
+
     private View bgView = new View();
     private Sprite bg = new Sprite(TextureLibrary.getTexture("skybg"));
+    private float colorCycleRate = 0.05f;
+    private boolean colorCycle = false;
+
     private int sparrowCount = 200;
     private int hawkCount = 5;
 
     private static final Time timePerFrame = Time.getSeconds(1.0f/60.0f);
+    private static int frameCount = 0;
 
     private List<Bird> birds = new ArrayList<Bird>();
 
@@ -69,7 +75,11 @@ public class Game {
             }
         }
     }
+
     private void update(Time dt){
+        if(colorCycle){
+            bg.setColor(colorCycle());
+        }
         Vector2f sumPos = Vector2f.ZERO;
 
         for(int i = 0; i < birds.size(); i++){
@@ -112,6 +122,7 @@ public class Game {
         }
 
         window.display();
+        frameCount++;
     };
 
 
@@ -142,7 +153,13 @@ public class Game {
         if(pos.x != x || pos.y != y){
             a.setPosition(new Vector2f(x, y));
         }
+    }
 
+    private Color colorCycle(){
+        int r = (int) Math.round(Math.sin(colorCycleRate * frameCount * (Math.PI / 180)) * 255);
+        int g = (int) Math.round(Math.sin(colorCycleRate / 2 * frameCount * (Math.PI / 180)) * 255);
+        int b = (int) Math.round(Math.sin(colorCycleRate / 3 * frameCount * (Math.PI / 180)) * 255);
+        return new Color(r, g, b, 255);
     }
 
 }

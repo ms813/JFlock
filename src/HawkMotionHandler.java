@@ -12,7 +12,7 @@ public class HawkMotionHandler implements BirdMotionHandler {
 
     private Bird target = null;
     private int maxPursueTime = 9000;
-    private int pursueTime = -1;
+    private int pursueTime = rnd.nextInt(maxPursueTime);
     private int currentPursueTime = 0;
 
     @Override
@@ -23,10 +23,6 @@ public class HawkMotionHandler implements BirdMotionHandler {
             }
         }
 
-        if(pursueTime < 0){
-            pursueTime = rnd.nextInt(maxPursueTime);
-        }
-
         if(currentPursueTime > pursueTime){
             //if spent too long pursuing, choose a new target
             target = chooseTarget(nearbyBirds);
@@ -35,7 +31,9 @@ public class HawkMotionHandler implements BirdMotionHandler {
         }
 
         currentPursueTime++;
-        return target != null ? Vector2f.mul(VMath.normalize(Vector2f.sub(target.getPosition(), myPos)), BirdSpecies.HAWK.getMaxSpeed()) : VMath.rndVector2f(BirdSpecies.HAWK.getMaxSpeed());
+
+        Vector2f pursueForce = target != null ? Vector2f.sub(target.getPosition(), myPos) : VMath.rndVector2f(BirdSpecies.HAWK.getMaxSpeed()/4);
+        return Vector2f.mul(VMath.normalize(pursueForce), BirdSpecies.HAWK.getMaxSpeed());
     }
 
     private Bird chooseTarget(List<Bird> nearbyBirds){
@@ -45,4 +43,5 @@ public class HawkMotionHandler implements BirdMotionHandler {
             return null;
         }
     }
+
 }
