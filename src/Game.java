@@ -36,7 +36,7 @@ public class Game {
     private int startingSparrows = 1;
     private int sparrowLimit = 250;
     private int startingHawks = 0;
-    private int hawkLimit = 50;
+    private int hawkLimit = 20;
 
     private static final Time timePerFrame = Time.getSeconds(1.0f/60.0f);
     private static int frameCount = 0;
@@ -76,7 +76,8 @@ public class Game {
                 if(sparrowCount < sparrowLimit){
                     BirdFactory bf = new BirdFactory(windowSize);
                     birds.add(bf.createBird(BirdSpecies.SPARROW));
-                    System.out.println("Adding a sparrow. There are now " + (sparrowCount + 1) + " sparrows.");
+                    sparrowCount++;
+                    System.out.println("Adding a sparrow. There are now " + sparrowCount + " sparrows.");
                 } else{
                     System.out.println("Cannot add more than " + sparrowLimit + " sparrows!");
                 }
@@ -98,10 +99,116 @@ public class Game {
 
                 if(sparrowCount > 0){
                     birds.remove(lastIndex);
-                    System.out.println("Sparrow removed. There are now " + (sparrowCount - 1) + " sparrows remaining.");
+                    sparrowCount--;
+                    System.out.println("Sparrow removed. There are now " + sparrowCount + " sparrows remaining.");
                 } else{
                     System.out.println("There are no sparrows left to remove!");
                 }
+            }
+        });
+
+        gui.addButton("Sparrow +10", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int sparrowCount = 0;
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.SPARROW){
+                        sparrowCount++;
+                    }
+                }
+
+                if(sparrowCount < sparrowLimit-10){
+                    BirdFactory bf = new BirdFactory(windowSize);
+                    for(int i = 0; i < 10; i++){
+                        birds.add(bf.createBird(BirdSpecies.SPARROW));
+                        sparrowCount++;
+                    }
+                    System.out.println("Adding 10 sparrows. There are now " + sparrowCount + " sparrows.");
+                } else if(sparrowCount < sparrowLimit){
+                    int count = sparrowLimit - sparrowCount;
+                    BirdFactory bf = new BirdFactory(windowSize);
+                    for(int i = 0; i < count; i++){
+                        birds.add(bf.createBird(BirdSpecies.SPARROW));
+                        sparrowCount++;
+                    }
+                    System.out.println("Added " + count + " sparrows to bring the total to " + sparrowCount + ". Can't add more than " + sparrowLimit + " sparrows!");
+                } else{
+                    System.out.println("Cannot add more than " + sparrowLimit + " sparrows!");
+                }
+            }
+        });
+
+        gui.addButton("Sparrow -10", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int sparrowCount = 0;
+                List<Bird> birdsToRemove = new ArrayList<Bird>();
+
+                for(Bird b : birds){
+
+                    if(b.getSpecies() == BirdSpecies.SPARROW){
+                        sparrowCount++;
+                        if(birdsToRemove.size() < 10){
+                            birdsToRemove.add(b);
+                        }
+                    }
+                }
+
+                if(sparrowCount > 10){
+
+                    birds.removeAll(birdsToRemove);
+                    sparrowCount -= birdsToRemove.size();
+
+                    System.out.println("10 sparrows removed. There are now " + sparrowCount + " sparrows remaining.");
+                } else if(sparrowCount > 0){
+                    int count = sparrowCount;
+                    birds.removeAll(birdsToRemove);
+                    sparrowCount -= birdsToRemove.size();
+                    System.out.println("Removed " + count + " sparrows to leave " + sparrowCount + ".");
+                } else{
+                    System.out.println("There are no sparrows left to remove!");
+                }
+            }
+        });
+
+        gui.addButton("Add max sparrows", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int sparrowCount = 0;
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.SPARROW){
+                        sparrowCount++;
+                    }
+                }
+
+                if(sparrowCount < sparrowLimit){
+                    BirdFactory bf = new BirdFactory(windowSize);
+
+                    int cap = (sparrowLimit - sparrowCount);
+                    for(int i = 0; i < cap; i++){
+                        birds.add(bf.createBird(BirdSpecies.SPARROW));
+                        sparrowCount++;
+                    }
+
+                    System.out.println("Added " + cap + " sparrows to make " + sparrowCount + " total.");
+                } else{
+                    System.out.println("There are already the maximum number of sparrows!");
+                }
+            }
+        });
+
+        gui.addButton("Remove all sparrows", new BtnFunction() {
+            @Override
+            public void onClick() {
+                List<Bird> birdsToRemove = new ArrayList<Bird>();
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.SPARROW){
+                        birdsToRemove.add(b);
+                    }
+                }
+                birds.removeAll(birdsToRemove);
+
+                System.out.println("Removed " + birdsToRemove.size() + " sparrows to leave none.");
             }
         });
 
@@ -144,6 +251,111 @@ public class Game {
                 } else{
                     System.out.println("There are no hawks left to remove!");
                 }
+            }
+        });
+
+        gui.addButton("Hawk +10", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int hawkCount = 0;
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.HAWK){
+                        hawkCount++;
+                    }
+                }
+
+                if(hawkCount < hawkLimit-10){
+                    BirdFactory bf = new BirdFactory(windowSize);
+                    for(int i = 0; i < 10; i++){
+                        birds.add(bf.createBird(BirdSpecies.HAWK));
+                        hawkCount++;
+                    }
+                    System.out.println("Adding 10 hawks. There are now " + hawkCount + " hawks.");
+                } else if(hawkCount < hawkLimit){
+                    int count = hawkLimit - hawkCount;
+                    BirdFactory bf = new BirdFactory(windowSize);
+                    for(int i = 0; i < count; i++){
+                        birds.add(bf.createBird(BirdSpecies.HAWK));
+                        hawkCount++;
+                    }
+                    System.out.println("Added " + count + " hawks to bring the total to " + hawkCount + ". Can't add more than " + hawkLimit + " hawks!");
+                } else{
+                    System.out.println("Cannot add more than " + hawkLimit + " hawks!");
+                }
+            }
+        });
+
+        gui.addButton("Hawk -10", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int hawkCount = 0;
+                List<Bird> birdsToRemove = new ArrayList<Bird>();
+
+                for(Bird b : birds){
+
+                    if(b.getSpecies() == BirdSpecies.HAWK){
+                        hawkCount++;
+                        if(birdsToRemove.size() < 10){
+                            birdsToRemove.add(b);
+                        }
+                    }
+                }
+
+                if(hawkCount > 10){
+
+                    birds.removeAll(birdsToRemove);
+                    hawkCount -= birdsToRemove.size();
+
+                    System.out.println("10 hawks removed. There are now " + hawkCount + " hawks remaining.");
+                } else if(hawkCount > 0){
+                    int count = hawkCount;
+                    birds.removeAll(birdsToRemove);
+                    hawkCount -= birdsToRemove.size();
+                    System.out.println("Removed " + count + " hawks to leave " + hawkCount + ".");
+                } else{
+                    System.out.println("There are no hawks left to remove!");
+                }
+            }
+        });
+
+        gui.addButton("Add max hawks", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int hawkCount = 0;
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.HAWK){
+                        hawkCount++;
+                    }
+                }
+
+                if(hawkCount < hawkLimit){
+                    BirdFactory bf = new BirdFactory(windowSize);
+
+                    int cap = (hawkLimit - hawkCount);
+                    for(int i = 0; i < cap; i++){
+                        birds.add(bf.createBird(BirdSpecies.HAWK));
+                        hawkCount++;
+                    }
+
+                    System.out.println("Added " + cap + " hawks to make " + hawkCount + " total.");
+                } else{
+                    System.out.println("There are already the maximum number of hawks!");
+                }
+            }
+        });
+
+        gui.addButton("Remove all hawks", new BtnFunction() {
+            @Override
+            public void onClick() {
+                List<Bird> birdsToRemove = new ArrayList<Bird>();
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.HAWK){
+                        birdsToRemove.add(b);
+                    }
+                }
+                birds.removeAll(birdsToRemove);
+
+                System.out.println("Removed " + birdsToRemove.size() + " hawks to leave none.");
             }
         });
 
@@ -239,7 +451,7 @@ public class Game {
 
         window.display();
         frameCount++;
-    };
+    }
 
 
     private void edgeWrap(Actor a){

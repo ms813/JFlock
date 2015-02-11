@@ -15,13 +15,14 @@ import java.util.List;
 public class Gui {
     private View guiView;
     private float height = 0.1f, width = 1.0f;
+    private int cols = 6;
 
     private List<GuiButton> buttons = new ArrayList<GuiButton>();
 
     public Gui(RenderWindow window){
         float h = height * window.getSize().y;
         float w = width * window.getSize().x;
-        guiView = new View(new FloatRect(0,0,window.getSize().x,window.getSize().y));
+        guiView = new View(new FloatRect(0, 0, window.getSize().x, window.getSize().y));
     }
 
     public void render(RenderWindow window){
@@ -42,12 +43,16 @@ public class Gui {
     }
 
     public void pack(RenderWindow window){
-        float w = width * window.getSize().x / buttons.size();
-        float h = window.getSize().y * height;
+        float w = width * window.getSize().x / (buttons.size() < cols ? buttons.size() : cols);
+        float h = (window.getSize().y * height) / (float)Math.ceil((float)buttons.size() / cols);
+
         for(int i = 0; i < buttons.size(); i++){
             GuiButton b = buttons.get(i);
             b.setSize(new Vector2f(w, h));
-            b.setPosition(new Vector2f(i* window.getSize().x/buttons.size(), 0));
+            float left = (float) Math.floor(i % cols) * w;
+            float top =  (float) Math.floor(i / cols) * h;
+            System.out.println(buttons.get(i).getLabel() + ", " + left + ", " + top);
+            b.setPosition(new Vector2f(left, top));
         }
     }
 

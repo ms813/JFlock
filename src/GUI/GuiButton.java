@@ -110,4 +110,8 @@ public class GuiButton {
         setSize(new Vector2f(w, h));
     }
 
+    public String getLabel(){
+        return label.getString();
+    }
+
 }
