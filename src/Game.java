@@ -1,6 +1,5 @@
-import GUI.GUI;
-import GUI.GuiButton;
-import GUI.BtnFunction;
+import Gui.Gui;
+import Gui.BtnFunction;
 import Libraries.TextureLibrary;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderWindow;
@@ -10,7 +9,9 @@ import org.jsfml.system.Clock;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
+import org.jsfml.window.Mouse;
 import org.jsfml.window.VideoMode;
+import org.jsfml.window.WindowStyle;
 import org.jsfml.window.event.Event;
 
 import java.util.ArrayList;
@@ -21,10 +22,10 @@ import java.util.List;
  */
 public class Game {
 
-    private Vector2i windowSize = new Vector2i(1200, 600);
+    private Vector2i windowSize = new Vector2i(1000, 500);
     private RenderWindow window = new RenderWindow();
 
-    private GUI gui = new GUI();
+    private Gui gui;
 
     private View view;
     private View bgView = new View();
@@ -32,8 +33,10 @@ public class Game {
     private float colorCycleRate = 0.05f;
     private boolean colorCycle = false;
 
-    private int sparrowCount = 200;
-    private int hawkCount = 5;
+    private int startingSparrows = 1;
+    private int sparrowLimit = 250;
+    private int startingHawks = 0;
+    private int hawkLimit = 50;
 
     private static final Time timePerFrame = Time.getSeconds(1.0f/60.0f);
     private static int frameCount = 0;
@@ -41,20 +44,110 @@ public class Game {
     private List<Bird> birds = new ArrayList<Bird>();
 
     private void init(){
-        window.create(new VideoMode(windowSize.x, windowSize.y), "JFlock");
+        window.create(new VideoMode(windowSize.x, windowSize.y), "JFlock", WindowStyle.NONE);
 
         view = (View) window.getView();
 
+        setupGui();
+
         BirdFactory birdFactory = new BirdFactory(windowSize);
-        for(int i = 0; i < sparrowCount; i++){
+        for(int i = 0; i < startingSparrows; i++){
             birds.add(birdFactory.createBird(BirdSpecies.SPARROW));
         }
 
-        for(int i = 0; i < hawkCount; i++){
+        for(int i = 0; i < startingHawks; i++){
             birds.add(birdFactory.createBird(BirdSpecies.HAWK));
         }
+    }
 
-        createGUI();
+    private void setupGui(){
+        gui = new Gui(window);
+
+        gui.addButton("Sparrow +", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int sparrowCount = 0;
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.SPARROW){
+                        sparrowCount++;
+                    }
+                }
+
+                if(sparrowCount < sparrowLimit){
+                    BirdFactory bf = new BirdFactory(windowSize);
+                    birds.add(bf.createBird(BirdSpecies.SPARROW));
+                    System.out.println("Adding a sparrow. There are now " + (sparrowCount + 1) + " sparrows.");
+                } else{
+                    System.out.println("Cannot add more than " + sparrowLimit + " sparrows!");
+                }
+
+            }
+        });
+
+        gui.addButton("Sparrow -", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int sparrowCount = 0;
+                int lastIndex = 0;
+                for(int i = 0; i < birds.size(); i++){
+                    if(birds.get(i).getSpecies() == BirdSpecies.SPARROW){
+                        sparrowCount++;
+                        lastIndex = i;
+                    }
+                }
+
+                if(sparrowCount > 0){
+                    birds.remove(lastIndex);
+                    System.out.println("Sparrow removed. There are now " + (sparrowCount - 1) + " sparrows remaining.");
+                } else{
+                    System.out.println("There are no sparrows left to remove!");
+                }
+            }
+        });
+
+        gui.addButton("Hawk +", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int hawkCount = 0;
+                for(Bird b : birds){
+                    if(b.getSpecies() == BirdSpecies.HAWK){
+                        hawkCount++;
+                    }
+                }
+
+                if(hawkCount < hawkLimit){
+                    BirdFactory bf = new BirdFactory(windowSize);
+                    birds.add(bf.createBird(BirdSpecies.HAWK));
+                    System.out.println("Adding a hawk. There are now " + (hawkCount + 1) + " hawks.");
+                } else{
+                    System.out.println("Cannot add more than " + hawkLimit + " hawks!");
+                }
+
+            }
+        });
+
+        gui.addButton("Hawk -", new BtnFunction() {
+            @Override
+            public void onClick() {
+                int hawkCount = 0;
+                int lastIndex = 0;
+                for(int i = 0; i < birds.size(); i++){
+                    if(birds.get(i).getSpecies() == BirdSpecies.HAWK){
+                        hawkCount++;
+                        lastIndex = i;
+                    }
+                }
+
+                if(hawkCount > 0){
+                    birds.remove(lastIndex);
+                    System.out.println("Hawk removed. There are now " + (hawkCount - 1) + " hawks remaining.");
+                } else{
+                    System.out.println("There are no hawks left to remove!");
+                }
+            }
+        });
+
+        gui.pack(window);
     }
 
     public void run(){
@@ -77,10 +170,17 @@ public class Game {
     }
 
     private void processEvents(){
-        gui.processEvents();
         for (Event event : window.pollEvents()) {
             if (event.type == Event.Type.CLOSED) {
                 window.close();
+            }
+
+            if (event.type == Event.Type.MOUSE_MOVED) {
+                gui.processMouseMoveEvent(new Vector2f(Mouse.getPosition(window)));
+            }
+
+            if(event.type == Event.Type.MOUSE_BUTTON_PRESSED){
+                gui.processMouseDownEvent(new Vector2f(Mouse.getPosition(window)));
             }
         }
     }
@@ -123,16 +223,20 @@ public class Game {
     }
 
     private void render(){
-        gui.render();
+
         window.clear();
 
         window.setView(bgView);
         window.draw(bg);
+
         window.setView(view);
 
         for(Actor a : birds){
             a.render(window);
         }
+
+        gui.render(window);
+
         window.display();
         frameCount++;
     };
@@ -165,30 +269,6 @@ public class Game {
         if(pos.x != x || pos.y != y){
             a.setPosition(new Vector2f(x, y));
         }
-    }
-
-    private void createGUI(){
-        gui.addButton(new GuiButton("Sparrow +", new BtnFunction() {
-            @Override
-            public void onClick() {
-                System.out.println("Sparrow +");
-            }
-        }));
-
-        gui.addButton(new GuiButton("Sparrow -", new BtnFunction() {
-            @Override
-            public void onClick() {
-                System.out.println("Sparrow -");
-            }
-        }));
-
-        gui.addButton(new GuiButton("Hawk +", new BtnFunction() {
-            @Override
-            public void onClick() {
-                System.out.println("Hawk +");
-            }
-        }));
-        gui.pack();
     }
 
     private Color colorCycle(){
