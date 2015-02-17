@@ -1,4 +1,4 @@
-package Gui;
+package GuiPackage;
 
 import Libraries.FontLibrary;
 import org.jsfml.graphics.*;

@@ -1,10 +1,9 @@
-package Gui;
+package GuiPackage;
 
 import org.jsfml.graphics.FloatRect;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.graphics.View;
 import org.jsfml.system.Vector2f;
-import org.jsfml.window.Mouse;
 
 import java.util.ArrayList;
 import java.util.List;

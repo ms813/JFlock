@@ -1,4 +1,4 @@
-package Gui;
+package GuiPackage;
 
 /**
  * Created by smithma on 05/02/15.

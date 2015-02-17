@@ -1,5 +1,5 @@
-import Gui.Gui;
-import Gui.BtnFunction;
+import GuiPackage.BtnFunction;
+import GuiPackage.Gui;
 import Libraries.TextureLibrary;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderWindow;
@@ -16,6 +16,7 @@ import org.jsfml.window.event.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by smithma on 22/01/15.
