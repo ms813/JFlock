@@ -16,6 +16,7 @@ import org.jsfml.window.event.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -45,6 +46,7 @@ public class Game {
     private List<Bird> birds = new ArrayList<Bird>();
 
     private void init(){
+        registerBirds();
         window.create(new VideoMode(windowSize.x, windowSize.y), "JFlock", WindowStyle.NONE);
 
         view = (View) window.getView();
@@ -59,6 +61,50 @@ public class Game {
         for(int i = 0; i < startingHawks; i++){
             birds.add(birdFactory.createBird(BirdSpecies.HAWK));
         }
+    }
+
+    private void registerBirds(){
+        BirdFactory.registerBirdSpecies(BirdSpecies.SPARROW, new BirdCreationInstructions() {
+            Random rnd = new Random();
+
+            @Override
+            public void setSpecies(Bird b) {
+                b.setSpecies(BirdSpecies.SPARROW);
+            }
+
+            @Override
+            public void setMotionHandler(Bird b) {
+                b.setMotionHandler(new SparrowMotionHandler());
+            }
+
+            @Override
+            public void setSprite(Bird b, Vector2f pos, float scale) {
+                Sprite s = new Sprite(TextureLibrary.getTexture("bird" + rnd.nextInt(5)));
+                s.setPosition(pos);
+                s.setScale(scale, scale);
+                b.setSprite(s);
+            }
+        });
+
+        BirdFactory.registerBirdSpecies(BirdSpecies.HAWK, new BirdCreationInstructions() {
+            @Override
+            public void setSpecies(Bird b) {
+                b.setSpecies(BirdSpecies.HAWK);
+            }
+
+            @Override
+            public void setMotionHandler(Bird b) {
+                b.setMotionHandler(new HawkMotionHandler());
+            }
+
+            @Override
+            public void setSprite(Bird b, Vector2f pos, float scale) {
+                Sprite s = new Sprite(TextureLibrary.getTexture("hawk"));
+                s.setPosition(pos);
+                s.setScale(scale, scale);
+                b.setSprite(s);
+            }
+        });
     }
 
     private void setupGui(){
